@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+  </head>
+  <body>
+    
+    <script>
+
+      const cart = []
+
+      function addToCart(name, price) {
+        for (let i = 0; i < cart.length; i += 1) {
+          if (cart[i].name === name) {
+            cart[i].qty += 1
+            return true
+          }
+        }
+
+        cart.push({ name, price, qty: 1})
+      }
+
+      function removeFromCart(name, qty = 0) {
+        for (let i = 0; i < cart.length; i += 1) {
+          if (cart[i].name === name) {
+            if (qty) {
+              let newQty = cart[i].qty - qty
+              cart[i].qty = newQty < 0 ? 0 : newQty
+            }
+          }
+        }
+      }
+
+      function showCart() {
+        for (let i = 0; i < cart.length; i += 1) {
+          console.log(`${cart[i].name} ${cart[i].price} x ${cart[i].qty} = ${cart[i].price * cart[i].qty}`)
+        }
+      }
+
+      function getTotal() {
+        let total = 0
+        for (let i = 0; i < cart.length; i += 1) {
+          total += cart[i].price * cart[i].qty
+        }
+        console.log(total)
+      }
+
+      addToCart('Apple', .99)
+      addToCart('Apple', .99)
+      addToCart('Orange', 1.29)
+      
+      showCart()
+
+      getTotal()
+
+    </script>
+  </body>
+</html>

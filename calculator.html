@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Calc - Grid</title>
+    <style>
+      body, html {
+        height: 100%;
+      }
+
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: Helvetica;
+        background-color: #666;
+      }
+
+      .container {
+        width: 400px;
+        height: 600px;
+        /* border: 1px solid; */
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: 1em repeat(6, 1fr);
+        grid-template-areas: "w w w w"
+                             "z z z z"
+                             "a b c d"
+                             "e f g h"
+                             "i j k l"
+                             "m n o p" 
+                             "q q r s";
+      }   
+      
+      #display { grid-area: z;}
+      #equation { grid-area: w;}
+
+      #clear {grid-area: a;}
+      #plus-minus {grid-area: b;}
+      #percent {grid-area: c;}
+      #divide {grid-area: d;}
+
+      #seven {grid-area: e;}
+      #eight {grid-area: f;}
+      #nine {grid-area: g;}
+      #multiply {grid-area: h;}
+
+      #four {grid-area: i;}
+      #five {grid-area: j;}
+      #six {grid-area: k;}
+      #subtract {grid-area: l;}
+
+      #one {grid-area: m;}
+      #two {grid-area: n;}
+      #three {grid-area: o;}
+      #add {grid-area: p;}
+
+      #zero {grid-area: q;}
+      #dot {grid-area: r;}
+      #equal {grid-area: s;}
+
+      /* Buttons */
+
+      /* All buttons */
+      button {
+        border: 1px solid;
+        margin: 1px;
+        font-size: 2em;
+        font-weight: 100;
+        border-radius: 0.25em;
+        font-weight: bold;
+        background-color: #aaa;
+        color: #fff;
+        border: none;
+      }
+
+      button:active {
+        opacity: 0.5;
+      }
+
+      .option {
+        background-color: #888;
+      }
+
+      .operator {
+        background-color: #f90;
+      }
+
+      #display {
+        font-size: 4em;
+        font-weight: 100;
+        text-align: right;
+        line-height: 100px;
+        padding: 0 0.25em;
+        background-color: #444;
+        color: #fff;
+      }  
+
+      #equation {
+        text-align: right;
+        line-height: 1;
+      }
+    </style>
+  </head>
+  <body>
+
+    <div class="container">
+
+      <div id="equation">0</div>
+      <div id="display">0</div>
+
+      <button id="clear" class="option" value="clear">C</button>
+      <button id="plus-minus" class="option" value="invert">+/-</button>
+      <button id="percent" class="option" value="%">%</button>
+
+      <button id="divide" class="operator" value="/">/</button>
+      <button id="multiply" class="operator" value="*">X</button>
+      <button id="subtract" class="operator" value="-">-</button>
+      <button id="add" class="operator" value="+">+</button>
+      <button id="equal" class="operator" value="=">=</button>
+
+      <button id="nine" class="number" value="9">9</button>
+      <button id="eight" class="number"value="8">8</button>
+      <button id="seven" class="number" value="7">7</button>
+      <button id="six" class="number" value="6">6</button>
+      <button id="five" class="number" value="5">5</button>
+      <button id="four" class="number" value="4">4</button>
+      <button id="three" class="number" value="3">3</button>
+      <button id="two" class="number" value="2">2</button>
+      <button id="one" class="number" value="1">1</button>
+      <button id="zero" class="number" value="0">0</button>
+
+      <button id="dot" class="number" value=".">.</button>
+
+    </div>
+
+    <script>
+
+      /* 
+      
+      Use pseudo code to describe the steps used by the calculator. 
+
+      - What are the steps to input a number? 
+      - What happens when you press an operation? 
+      - What about when you press the . ?
+      - What happens when you press = ?
+      - Put it all together and write the steps to add two numbers
+      
+      */
+
+      const display = document.getElementById('display')
+      const equation = document.getElementById('equation')
+
+      // Handle Options 
+      const options = document.getElementsByClassName('option')
+      for (let i = 0; i < options.length; i += 1) {
+        options[i].onclick = handleOption
+      }
+
+      function handleOption(e) {
+        console.log(e.target.value)
+      }
+
+      // Handle Operators 
+      const operators = document.getElementsByClassName('operator')
+      for (let i = 0; i < operators.length; i += 1) {
+        operators[i].onclick = handleOperator
+      }
+
+      function handleOperator(e) {
+        handlerOPerator(e.target.value)
+      }
+
+      // Handle Numbers
+      const numbers = document.getElementsByClassName('number')
+      for (let i = 0; i < numbers.length; i += 1) {
+        numbers[i].onclick = handleNumber
+      }
+
+      function handleNumber(e) {
+        handleInput(e.target.value)
+      }
+
+      let operandA = ''
+      let operandB = ''
+      let operation = ''
+
+      function handleInput(n) {
+        if (operation === '') {
+          if (n === '.' && operandA.includes('.')) {
+            return
+          }
+          operandA += n
+          updateDisplay(operandA)
+        } else {
+          if (n === '.' && operandB.includes('.')) {
+            return
+          }
+          operandB += n
+          updateDisplay(operandB)
+        }
+      }
+
+      function handlerOPerator(str) {
+        if (str === '=') {
+          operandA = doMath(operandA, operandB, operation)
+          operandB = ''
+          operation = ''
+          updateDisplay(operandA)
+        } else {
+          operation = str
+          updateDisplay(operandB)
+        }
+      }
+
+      function updateDisplay(str) {
+        display.innerHTML = str
+        equation.innerHTML = `${operandA} ${operation} ${operandB}`
+      }
+
+      function doMath(opA, opB, op) {
+        let a = parseFloat(opA)
+        let b = parseFloat(opB)
+
+        switch(op) {
+          case '+':
+            return a + b
+
+          case '-':
+            return a - b
+            
+          case '*':
+            return a * b
+            
+          case '/':
+            return a / b
+          
+        }
+      }
+    </script>
+  </body>
+</html>
