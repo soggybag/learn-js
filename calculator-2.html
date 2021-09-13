@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Calc - Grid</title>
+    <style>
+      body, html {
+        height: 100%;
+      }
+
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: Helvetica;
+        background-color: #666;
+      }
+
+      .calculator {
+        width: 300px;
+        height: 500px;
+        /* border: 1px solid; */
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: 1em repeat(6, 1fr);
+        grid-template-areas: "w w w w"
+                             "z z z z"
+                             "a b c d"
+                             "e f g h"
+                             "i j k l"
+                             "m n o p"
+                             "q q r s";
+      }   
+      
+      #display { grid-area: z;}
+      #equation { grid-area: w;}
+
+      #clear {grid-area: a;}
+      #plus-minus {grid-area: b;}
+      #percent {grid-area: c;}
+      #divide {grid-area: d;}
+
+      #seven {grid-area: e;}
+      #eight {grid-area: f;}
+      #nine {grid-area: g;}
+      #multiply {grid-area: h;}
+
+      #four {grid-area: i;}
+      #five {grid-area: j;}
+      #six {grid-area: k;}
+      #subtract {grid-area: l;}
+
+      #one {grid-area: m;}
+      #two {grid-area: n;}
+      #three {grid-area: o;}
+      #add {grid-area: p;}
+
+      #zero {grid-area: q;}
+      #dot {grid-area: r;}
+      #equal {grid-area: s;}
+
+      /* Buttons */
+
+      /* All buttons */
+      button {
+        border: none;
+        margin: 1px;
+        font-size: 2em;
+        font-weight: 100;
+        border-radius: 0.25em;
+        background-color: #aaa;
+        color: #fff;
+      }
+
+      button:active {
+        opacity: 0.5;
+      }
+
+      .option {
+        background-color: #888;
+      }
+
+      .operator {
+        background-color: #f90;
+      }
+
+      #display {
+        font-size: 4em;
+        font-weight: 100;
+        text-align: right;
+        line-height: 100px;
+        padding: 0 0.25em;
+        background-color: #444;
+        color: #fff;
+      }  
+
+      #equation {
+        color: #fff;
+        text-align: right;
+        line-height: 1;
+        background-color: #888;
+      }
+    </style>
+  </head>
+  <body>
+
+    <div class="calculator" id="calculator">
+      <div id="display">0</div>
+
+      <button id="clear" class="option" data-action="clear" value="clear">C</button>
+      <button id="plus-minus" class="option" data-action="invert" value="invert">+/-</button>
+      <button id="percent" class="option" data-action="percent" value="%">%</button>
+
+      <button id="divide" class="operator" data-action="/" value="/">/</button>
+      <button id="multiply" class="operator" data-action="*" value="*">X</button>
+      <button id="subtract" class="operator" data-action="-" value="-">-</button>
+      <button id="add" class="operator" data-action="+" value="+">+</button>
+      <button id="equal" class="operator" data-action="=" value="=">=</button>
+
+      <button id="nine" class="number" data-action="digit" value="9">9</button>
+      <button id="eight" class="number" data-action="digit" value="8">8</button>
+      <button id="seven" class="number" data-action="digit" value="7">7</button>
+      <button id="six" class="number" data-action="digit" value="6">6</button>
+      <button id="five" class="number" data-action="digit" value="5">5</button>
+      <button id="four" class="number" data-action="digit" value="4">4</button>
+      <button id="three" class="number" data-action="digit" value="3">3</button>
+      <button id="two" class="number" data-action="digit" value="2">2</button>
+      <button id="one" class="number" data-action="digit" value="1">1</button>
+      <button id="zero" class="number" data-action="digit" value="0">0</button>
+
+      <button id="dot" class="number" data-action="." value=".">.</button>
+    </div>
+
+  </body>
+</html>

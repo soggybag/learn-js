@@ -16,8 +16,8 @@
       }
 
       .container {
-        width: 400px;
-        height: 600px;
+        width: 300px;
+        height: 500px;
         /* border: 1px solid; */
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -27,7 +27,7 @@
                              "a b c d"
                              "e f g h"
                              "i j k l"
-                             "m n o p" 
+                             "m n o p"
                              "q q r s";
       }   
       
@@ -96,40 +96,42 @@
       }  
 
       #equation {
+        color: #fff;
         text-align: right;
         line-height: 1;
+        background-color: #888;
       }
     </style>
   </head>
   <body>
 
-    <div class="container">
+    <div class="container" id="calculator">
 
       <div id="equation">0</div>
       <div id="display">0</div>
 
-      <button id="clear" class="option" value="clear">C</button>
-      <button id="plus-minus" class="option" value="invert">+/-</button>
-      <button id="percent" class="option" value="%">%</button>
+      <button id="clear" class="option" data-action="clear" value="clear">C</button>
+      <button id="plus-minus" class="option" data-action="invert" value="invert">+/-</button>
+      <button id="percent" class="option" data-action="percent" value="%">%</button>
 
-      <button id="divide" class="operator" value="/">/</button>
-      <button id="multiply" class="operator" value="*">X</button>
-      <button id="subtract" class="operator" value="-">-</button>
-      <button id="add" class="operator" value="+">+</button>
-      <button id="equal" class="operator" value="=">=</button>
+      <button id="divide" class="operator" data-action="/" value="/">/</button>
+      <button id="multiply" class="operator" data-action="*" value="*">X</button>
+      <button id="subtract" class="operator" data-action="-" value="-">-</button>
+      <button id="add" class="operator" data-action="+" value="+">+</button>
+      <button id="equal" class="operator" data-action="=" value="=">=</button>
 
-      <button id="nine" class="number" value="9">9</button>
-      <button id="eight" class="number"value="8">8</button>
-      <button id="seven" class="number" value="7">7</button>
-      <button id="six" class="number" value="6">6</button>
-      <button id="five" class="number" value="5">5</button>
-      <button id="four" class="number" value="4">4</button>
-      <button id="three" class="number" value="3">3</button>
-      <button id="two" class="number" value="2">2</button>
-      <button id="one" class="number" value="1">1</button>
-      <button id="zero" class="number" value="0">0</button>
+      <button id="nine" class="number" data-action="digit" value="9">9</button>
+      <button id="eight" class="number" data-action="digit" value="8">8</button>
+      <button id="seven" class="number" data-action="digit" value="7">7</button>
+      <button id="six" class="number" data-action="digit" value="6">6</button>
+      <button id="five" class="number" data-action="digit" value="5">5</button>
+      <button id="four" class="number" data-action="digit" value="4">4</button>
+      <button id="three" class="number" data-action="digit" value="3">3</button>
+      <button id="two" class="number" data-action="digit" value="2">2</button>
+      <button id="one" class="number" data-action="digit" value="1">1</button>
+      <button id="zero" class="number" data-action="digit" value="0">0</button>
 
-      <button id="dot" class="number" value=".">.</button>
+      <button id="dot" class="number" data-action="." value=".">.</button>
 
     </div>
 
@@ -147,42 +149,57 @@
       
       */
 
+      // =====================================================
+      // **** Variables ****
+
+      // --- Constants 
+
       const display = document.getElementById('display')
       const equation = document.getElementById('equation')
+      const calculator = document.getElementById('calculator')
 
-      // Handle Options 
-      const options = document.getElementsByClassName('option')
-      for (let i = 0; i < options.length; i += 1) {
-        options[i].onclick = handleOption
-      }
+      // --- Variables 
 
-      function handleOption(e) {
-        console.log(e.target.value)
-      }
-
-      // Handle Operators 
-      const operators = document.getElementsByClassName('operator')
-      for (let i = 0; i < operators.length; i += 1) {
-        operators[i].onclick = handleOperator
-      }
-
-      function handleOperator(e) {
-        handlerOPerator(e.target.value)
-      }
-
-      // Handle Numbers
-      const numbers = document.getElementsByClassName('number')
-      for (let i = 0; i < numbers.length; i += 1) {
-        numbers[i].onclick = handleNumber
-      }
-
-      function handleNumber(e) {
-        handleInput(e.target.value)
-      }
-
-      let operandA = ''
-      let operandB = ''
+      let operandA = 0
+      let operandB = 0
       let operation = ''
+
+
+      // --- Listeners 
+
+      calculator.addEventListener('click', function(e) {
+        if (e.target.classList.contains('option')) {
+          handleOption(e.target.value)
+        } else if (e.target.classList.contains('operator')) {
+          handleOperator(e.target.value)
+        } else if (e.target.classList.contains('number')) {
+          handleInput(e.target.value)
+        }
+      })
+
+      // --- Funtions 
+
+      // Handle Options - clear, %, +/-
+
+      function handleOption(option) {
+        console.log(option)
+        if (option === 'clear') {
+          operandA = '0'
+          operandB = ''
+          operation = ''
+          updateDisplay(operandA)
+        } else if (option === 'invert') {
+          if (operation === '') {
+            operandA = parseFloat(operandA) * -1
+            updateDisplay(operandA)
+          } else {
+            operandB = parseFloat(operandB) * -1
+            updateDisplay(operandB)
+          }
+        }
+      }
+
+      // Handle Numbers - 0, 1, 2, 3 etc.
 
       function handleInput(n) {
         if (operation === '') {
@@ -200,7 +217,9 @@
         }
       }
 
-      function handlerOPerator(str) {
+      // Handle Operators - +, -, /, *
+      
+      function handleOperator(str) {
         if (str === '=') {
           operandA = doMath(operandA, operandB, operation)
           operandB = ''
@@ -212,10 +231,12 @@
         }
       }
 
+
       function updateDisplay(str) {
         display.innerHTML = str
         equation.innerHTML = `${operandA} ${operation} ${operandB}`
       }
+
 
       function doMath(opA, opB, op) {
         let a = parseFloat(opA)
@@ -236,6 +257,36 @@
           
         }
       }
+
+      // Testing 
+
+
+
+      /*
+      
+      What will you learn by making this project? 
+
+      - variables 
+        - Variables are a core feature of any programming language. 
+        - JS has three types of variables with unique features two of which are covered here. 
+      - functions 
+        - functions are another core feature of any programming langauge. 
+        - functions take input (parameters) and provide output (return)
+      - expressions and operators 
+        - Another core feature that you will use in every piece of code you write.
+      - JS and the DOM
+        - Connecting your JS with DOM element is huge it's how you make user interfaces and work with user input
+        - getElementById allows for access to elements via their id name
+        - getElementsByClassName allows for access to collections of elements by their class name
+          - Getting a collection provides an Array like object
+      - Arrays and Array Like Objects 
+        - Arrays are  collections/lists of things
+      - Loops
+        - A loop repeats a block of code a number of times
+      - if else 
+        - Controlling the flow of code and making decisions about which blocks of code to execute 
+      
+      */
     </script>
   </body>
 </html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <style>
+      .container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 1em;
+        width: calc(32px * 14);
+        margin: auto;
+      }
+
+      .game-board {
+        width: calc(30px * 10);
+        display: grid;
+        grid-template-columns: repeat(10, 1fr);
+        grid-template-rows: repeat(18, 30px);
+        grid-gap: 2px;
+      }
+
+      .next-shape {
+        width: calc(30px * 4);
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(4, 30px);
+        grid-gap: 2px;
+      }
+
+      .square {
+        background-color: cadetblue;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="game" class="container">
+
+      <div id="next-shape" class="next-shape">
+        <!-- Next Shape -->
+      </div>
+      
+      <div id="game-board" class="game-board">
+        <!-- Game Board Here -->
+      </div>
+
+    </div>
+
+    <script src="tetris-constants.js"></script>
+    <script>
+      const gameBoard = document.getElementById('game-board')
+      const nextShapeGrid = document.getElementById('next-shape')
+
+      const gridWidth = 10        // width of grid
+      const gridHeight = 18       // height of grid
+      const gridElements = []     // Grid square divs
+      const nextGridElements = [] // Next Shape square divs
+      
+      let x = 2
+      let y = 4
+      let shape = 1
+      let rotation = 0
+      let nextShape = 1
+
+      function makeGrid() {
+        for (let row = 0; row < gridHeight; row += 1) {
+          gridElements.push([])
+          for (let col = 0; col < gridWidth; col += 1) {
+            const square = document.createElement('div')
+            square.classList.add('square')
+            square.dataset.row = row
+            square.dataset.col = col
+            gridElements[row].push(square)
+            gameBoard.appendChild(square)
+          }
+        }
+      }
+
+      function makeNextGrid() {
+        for (let row = 0; row < 4; row += 1) {
+          nextGridElements.push([])
+          for (let col = 0; col < 4; col += 1) {
+            const square = document.createElement('div')
+            square.classList.add('square')
+            square.dataset.row = row
+            square.dataset.col = col
+            nextGridElements[row].push(square)
+            nextShapeGrid.appendChild(square)
+          }
+        }
+      }
+
+      function showNext() {
+        const shapeArray = shapes[nextShape][0]
+
+        for (let row = 0; row < shapeArray.length; row += 1) {
+          for (let col = 0; col < shapeArray[row].length; col += 1) {
+            const color = shapeArray[row][col] * shape
+            nextGridElements[row][col].style.backgroundColor = colors[color]
+          }
+        }
+      }
+
+      function mapShapeToGrid() {
+        const shapeArray = shapes[shape][rotation]
+
+        for (let row = 0; row < gridElements.length; row += 1) {
+          for (let col = 0; col < gridElements[row].length; col += 1) {
+            const shapeRow = row - y
+            const shapeCol = col - x
+            
+            if (shapeRow >= 0 && shapeRow < shapeArray.length 
+            && shapeCol >= 0 && shapeCol < shapeArray[shapeRow].length 
+            && shapeArray[shapeRow][shapeCol] > 0) {
+              gridElements[row][col].style.backgroundColor = colors[shape]
+            } else {
+              gridElements[row][col].style.backgroundColor = colors[0]
+            }
+          }
+        }
+      }
+
+      // init the game 
+      makeGrid()
+      makeNextGrid()
+      showNext(1)
+      mapShapeToGrid()
+
+    </script>
+  </body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+
+    <style>
+      .calculator {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(6, 1fr);
+        grid-template-areas:  "a a a a"
+                              "b c d e"
+                              "f g h i"
+                              "j k l m"
+                              "n o p q"
+                              "r r s t";
+      }
+
+      .answer { grid-area: a }
+    </style>
+  </head>
+  <body>
+
+    <div class="calculator">
+      <div class="answer">3.14</div>
+
+      <button>C</button>
+      <button>+/-</button>
+      <button>%</button>
+
+      <button>/</button>
+      <button>X</button>
+      <button>-</button>
+      <button>+</button>
+      <button>=</button>
+
+      <button>9</button>
+      <button>8</button>
+      <button>7</button>
+
+      <button>6</button>
+      <button>5</button>
+      <button>4</button>
+
+      <button>3</button>
+      <button>2</button>
+      <button>1</button>
+
+      <button style="grid-area: r">0</button>
+      <button>.</button>
+      
+    </div>
+
+  </body>
+</html>
